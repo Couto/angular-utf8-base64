@@ -1,6 +1,19 @@
-'use strict';
-
-var angular = require('angular');
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['angular'], function (angular) {
+            return (root.returnExportsGlobal = factory(angular));
+        });
+    } else if (typeof module === 'object' && module.exports) {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory(require('angular'));
+    } else {
+        // Browser globals
+        root.returnExportsGlobal = factory(root.angular);
+    }
+}(this, function (angular) {
 
 /*
  * Encapsulation of Andrey Bezyazychniy's encapsulation of Vassilis Petroulias's base64.js library.
@@ -185,7 +198,7 @@ var B64url = {
     }
 };
 
-module.exports = angular
+return angular
     .module('utf8-base64', [])
     .constant('base64', {
         decode: B64.decode,
@@ -194,3 +207,4 @@ module.exports = angular
         urlencode: B64url.encode,
     })
     .name;
+}));
